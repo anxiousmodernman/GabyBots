@@ -27,20 +27,31 @@ add_introspection_rules([], ["^scraping\.models\.WeakForeignKey"])
 #
 #pre_delete.connect(pre_delete_handler)
 
-
-class WebSource(models.Model):
+class SourceModel(models.Model):
+    class Meta:
+        abstract = True
     scraper = WeakForeignKey(Scraper)
     scraper_runtime = WeakForeignKey(SchedulerRuntime)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=20)
+
+
+class ScrapedItemModel(models.Model):
+    class Meta:
+        abstract = True
+    checker_runtime = WeakForeignKey(SchedulerRuntime)
+
+
+class WebSource(SourceModel):
+    description = models.CharField(max_length=200)
     url = models.URLField()
 
     def __unicode__(self):
-        return self.name
+        return self.description
 
 
-class Article(models.Model):
-    checker_runtime = WeakForeignKey(SchedulerRuntime)
-    # This name is significant to DjangoWriterPipeline
+class RSSItemModel(ScrapedItemModel):
+    class Meta:
+        abstract = True
     source = models.ForeignKey(WebSource)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -48,3 +59,7 @@ class Article(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class Article(RSSItemModel):
+    pass
