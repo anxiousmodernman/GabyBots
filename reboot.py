@@ -2,8 +2,9 @@ __author__ = 'coleman'
 
 # TODO make this more Pythonic, avoid using os.system()
 # TODO write fixture to temp file and add in checks to avoid blowing away filled-out fixtures!
+# TODO use os.path instead of strings
 
-# This script saves fixtures (or thows away your changes) and runs syncdb, creating a superuser for the sqlite3 database
+# This script saves fixtures (or throws away your changes) and runs syncdb, creating a superuser for the sqlite3 database
 # Superuser is 'admin', password 'testing123'
 
 
@@ -34,7 +35,7 @@ os.system(PROJECT_ROOT + "/manage.py migrate")
 
 # load the fixtures. This will have ALL our scrapers.
 print '\nLoading the fixtures. These are our scrapers.'
-os.system(PROJECT_ROOT + "/manage.py loaddata ./fixtures/starter.json")
+os.system(PROJECT_ROOT + "/manage.py loaddata " + PROJECT_ROOT + "/fixtures/starter.json")
 
 
 
